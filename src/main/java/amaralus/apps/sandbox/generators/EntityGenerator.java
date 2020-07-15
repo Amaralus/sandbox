@@ -7,17 +7,17 @@ import java.util.Objects;
 
 public class EntityGenerator {
 
-    private final GeneratorFactory generatorFactory;
+    private final RandomGeneratorFactory randomGeneratorFactory;
 
     public EntityGenerator() {
-        this.generatorFactory = new GeneratorFactory();
+        this.randomGeneratorFactory = new RandomGeneratorFactory();
     }
 
     public void generate(Object object) throws IllegalAccessException {
         Objects.requireNonNull(object);
 
         for (Map.Entry<Field, Class<?>> entry : extractFieldsTypes(object).entrySet()) {
-            Generator<?> generator = generatorFactory.produce(entry.getValue());
+            Generator<?> generator = randomGeneratorFactory.produce(entry.getValue());
 
             if (generator != null) {
                 entry.getKey().set(object, generator.generate());

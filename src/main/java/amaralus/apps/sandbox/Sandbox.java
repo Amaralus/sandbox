@@ -1,12 +1,9 @@
 package amaralus.apps.sandbox;
 
-import amaralus.apps.sandbox.entities.IntEntity;
 import amaralus.apps.sandbox.entities.SomeClass;
 import amaralus.apps.sandbox.generators.EntityGenerator;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Field;
-import java.math.BigInteger;
 import java.util.*;
 
 @Slf4j
