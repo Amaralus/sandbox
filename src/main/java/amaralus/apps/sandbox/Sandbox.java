@@ -1,23 +1,22 @@
 package amaralus.apps.sandbox;
 
-import amaralus.apps.sandbox.entities.SomeClass;
-import amaralus.apps.sandbox.generators.EntityGenerator;
+
+import amaralus.apps.sandbox.gamehelpers.ResourceCalculator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+
+import static amaralus.apps.sandbox.gamehelpers.DysonSphereProgramResources.*;
 
 @Slf4j
 public class Sandbox {
 
     static Random random = new Random();
 
-    public static void main(String... args) throws IllegalAccessException, NoSuchFieldException {
-        EntityGenerator entityGenerator = new EntityGenerator();
-        SomeClass someClass = SomeClass.builder().build();
+    public static void main(String... args) {
+        var calc = new ResourceCalculator();
 
-        entityGenerator.generate(someClass);
-
-        log.info("someclass = {}", someClass);
+        calc.calculate(MAGNETIC_COIL, 1);
     }
 
     public static int percentOfNumber(int number, int percent) {
