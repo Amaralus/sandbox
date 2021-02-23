@@ -16,7 +16,7 @@ public class Sandbox {
     public static void main(String... args) {
         var calc = new ResourceCalculator();
 
-        calc.calculate(MAGNETIC_COIL, 1);
+        calc.calculate(QUANTUM_CHIP, 1);
     }
 
     public static int percentOfNumber(int number, int percent) {

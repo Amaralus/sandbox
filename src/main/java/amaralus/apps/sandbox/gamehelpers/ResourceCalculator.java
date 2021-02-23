@@ -35,13 +35,14 @@ public class ResourceCalculator {
         factoryInfo.productionProcess = process;
 
         var productivity = calculateOutputProductivity(process, demandedResource.resource);
-        factoryInfo.nodes = (int) (demandedResource.requiredProductivity / productivity);
+        factoryInfo.nodes = demandedResource.requiredProductivity / productivity;
 
         var nodeSurplus = factoryInfo.nodes % 1d;
         if (nodeSurplus == 0)
             factoryInfo.totalProductivity = demandedResource.requiredProductivity;
         else {
-            factoryInfo.nodes++;
+            factoryInfo.nodes = Math.ceil(factoryInfo.nodes);
+            factoryInfo.totalProductivity = productivity;
             factoryInfo.surplus = productivity - (productivity * nodeSurplus);
         }
 
@@ -82,14 +83,14 @@ public class ResourceCalculator {
 
     private void printFactoryInfo() {
         System.out.println("Result factories");
-        printLine(26, 7, 14, 9);
-        System.out.printf("| %-25s| %-6s| %-13s| %-8s|%n", "Production processes", "Nodes", "Productivity", "Surplus");
+        printLine(38, 7, 14, 9);
+        System.out.printf("| %-37s| %-6s| %-13s| %-8s|%n", "Production processes", "Nodes", "Productivity", "Surplus");
 
         for (var factoryInfo : factoryInfoList) {
-            printLine(26, 7, 14, 9);
+            printLine(38, 7, 14, 9);
             factoryInfo.print();
         }
-        printLine(26, 7, 14, 9);
+        printLine(38, 7, 14, 9);
     }
 
     private void printDemanded() {
@@ -134,12 +135,12 @@ public class ResourceCalculator {
     @EqualsAndHashCode
     private static class ResourceFactoryInfo {
         ProductionProcess productionProcess;
-        int nodes;
+        double nodes;
         double totalProductivity;
         double surplus;
 
         void print() {
-            System.out.printf("| %-25s| %-6d| %-13.1f| %-8.1f|%n", productionProcess.getName(), nodes, totalProductivity, surplus);
+            System.out.printf("| %-37s| %-6.0f| %-13.1f| %-8.1f|%n", productionProcess.getName(), nodes, totalProductivity, surplus);
         }
     }
 
