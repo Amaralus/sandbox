@@ -10,6 +10,7 @@ public final class DysonSphereProgramResources {
     public static final Resource STONE = new Resource("Stone");
     public static final Resource WATER = new Resource("Water");
     public static final Resource HYDROGEN = new Resource("Hydrogen");
+    public static final Resource FIRE_ICE = new Resource("Fire ice");
 
     public static final Resource IRON_INGOT = new Resource("Iron ingot");
     public static final Resource COPPER_INGOT = new Resource("Copper ingot");
@@ -18,6 +19,7 @@ public final class DysonSphereProgramResources {
     public static final Resource GLASS = new Resource("Glass");
     public static final Resource MAGNET = new Resource("Magnet");
 
+    public static final Resource STEEL = new Resource("Steel");
     public static final Resource MAGNETIC_COIL = new Resource("Magnetic coil");
     public static final Resource MICROCRYSTALLINE_COMPONENT = new Resource("Microrystalline component");
     public static final Resource CIRCUIT_BOARD = new Resource("Circuit board");
@@ -60,6 +62,11 @@ public final class DysonSphereProgramResources {
                     .input(IRON_ORE, 1)
                     .output(MAGNET, 1);
 
+    public static final ProductionProcess STEEL_PRODUCTION =
+            new ProductionProcess("Steel productuin", 3)
+                    .input(IRON_INGOT, 3)
+                    .output(STEEL, 1);
+
     public static final ProductionProcess MAGNETIC_COIL_PRODUCTION =
             new ProductionProcess("Magnetic coil production", 1)
                     .input(MAGNET, 2)
@@ -91,12 +98,17 @@ public final class DysonSphereProgramResources {
                     .input(WATER, 2)
                     .output(TITANIUM_GLASS, 2);
 
+    public static final ProductionProcess GRAPHENE_PRODUCTION =
+            new ProductionProcess("Graphene production", 2)
+                    .input(FIRE_ICE, 2)
+                    // todo учет нескольких выходов
+                    //.output(HYDROGEN, 1)
+                    .output(GRAPHENE, 2);
+
     public static final ProductionProcess CASIMIR_CRYSTAL_PRODUCTION =
             new ProductionProcess("Casimir crystal production" ,4)
                     .input(OPTICAL_GRATING_CRYSTAL, 6)
-                    //todo
                     .input(GRAPHENE, 2)
-                    // todo
                     .input(HYDROGEN, 12)
                     .output(CASIMIR_CRYSTAL, 1);
 
