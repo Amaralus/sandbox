@@ -16,9 +16,8 @@ public class ResourceCalculator {
         var productivity = calculateOutputProductivity(resource.getProductionProcesses().get(0), resource) * factoryNodeCount;
         addDemandedResource(resource, productivity);
 
-        while (!demandedResources.isEmpty()) {
+        while (!demandedResources.isEmpty())
             processDemandedResource(demandedResources.get(0));
-        }
 
         printResult();
     }
@@ -29,6 +28,12 @@ public class ResourceCalculator {
             addDemandedResourceWithoutProcess(demandedResource);
             demandedResources.remove(demandedResource);
             return;
+        }
+
+        var existedFactoryInfo = getExistedFactoryInfo(process);
+        if (existedFactoryInfo != null) {
+            demandedResource.productivity -= existedFactoryInfo.surplus;
+            existedFactoryInfo.surplus = 0d;
         }
 
         var factoryInfo = new FactoryInfo();
@@ -45,12 +50,11 @@ public class ResourceCalculator {
         }
         factoryInfo.totalProductivity = productivity * factoryInfo.nodes;
 
-        factoryInfoList.add(factoryInfo);
+        addFactoryInfo(factoryInfo);
         demandedResources.remove(demandedResource);
 
-        for (var inputResource : process.getInput().keySet()) {
+        for (var inputResource : process.getInput().keySet())
             addDemandedResource(inputResource, calculateInputProductivity(process, inputResource) * factoryInfo.nodes);
-        }
     }
 
     private double calculateOutputProductivity(ProductionProcess process, Resource resource) {
@@ -66,17 +70,43 @@ public class ResourceCalculator {
         return processes.isEmpty() ? null : processes.get(0);
     }
 
+    private void addFactoryInfo(FactoryInfo factoryInfo) {
+        var existedFactoryInfo = getExistedFactoryInfo(factoryInfo.productionProcess);
+        if (existedFactoryInfo == null)
+            factoryInfoList.add(factoryInfo);
+        else {
+            existedFactoryInfo.nodes += factoryInfo.nodes;
+            existedFactoryInfo.totalProductivity += factoryInfo.totalProductivity;
+            existedFactoryInfo.surplus += factoryInfo.surplus;
+        }
+    }
+
+    private FactoryInfo getExistedFactoryInfo(ProductionProcess productionProcess) {
+        return factoryInfoList.stream()
+                .filter(factoryInfo -> factoryInfo.productionProcess.equals(productionProcess))
+                .findFirst()
+                .orElse(null);
+    }
+
     private void addDemandedResource(Resource resource, double productivity) {
         demandedResources.add(new ResourceInfo(resource, productivity));
     }
 
     private void addDemandedResourceWithoutProcess(ResourceInfo demandedResource) {
-        demandedResourcesWithoutProcess.add(demandedResource);
+        var existedResource = demandedResourcesWithoutProcess.stream()
+                .filter(resourceInfo -> resourceInfo.resource.equals(demandedResource.resource))
+                .findFirst()
+                .orElse(null);
+
+        if (existedResource == null)
+            demandedResourcesWithoutProcess.add(demandedResource);
+        else {
+            existedResource.productivity += demandedResource.productivity;
+        }
     }
 
     private void printResult() {
         printFactoryInfo();
-        printDemanded();
         printDemandWithoutProcess();
     }
 
@@ -92,34 +122,19 @@ public class ResourceCalculator {
         printLine(38, 7, 14, 9);
     }
 
-    private void printDemanded() {
-        if (demandedResources.isEmpty())
-            return;
-
-        System.out.println("\nDemanded resources");
-        printLine(21, 14);
-        System.out.printf("| %-21s| %-13s|%n", "Resource", "Productivity");
-
-        for (var demanded : demandedResources) {
-            printLine(21, 14);
-            demanded.print();
-        }
-        printLine(21, 14);
-    }
-
     private void printDemandWithoutProcess() {
         if (demandedResourcesWithoutProcess.isEmpty())
             return;
         System.out.println("\nDemanded resources without process");
 
-        printLine(21, 14);
-        System.out.printf("| %-20s| %-13s|%n", "Resource", "Productivity");
+        printLine(25, 14);
+        System.out.printf("| %-24s| %-13s|%n", "Resource", "Productivity");
 
         for (var demand : demandedResourcesWithoutProcess) {
-            printLine(21, 14);
+            printLine(25, 14);
             demand.print();
         }
-        printLine(21, 14);
+        printLine(25, 14);
     }
 
     private void printLine(int... repeats) {
@@ -155,7 +170,7 @@ public class ResourceCalculator {
         }
 
         void print() {
-            System.out.printf("| %-20s| %-13.1f|%n", resource.getName(), productivity);
+            System.out.printf("| %-24s| %-13.1f|%n", resource.getName(), productivity);
         }
     }
 }
