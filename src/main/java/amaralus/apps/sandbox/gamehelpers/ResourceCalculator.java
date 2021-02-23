@@ -38,13 +38,12 @@ public class ResourceCalculator {
         factoryInfo.nodes = demandedResource.requiredProductivity / productivity;
 
         var nodeSurplus = factoryInfo.nodes % 1d;
-        if (nodeSurplus == 0)
-            factoryInfo.totalProductivity = demandedResource.requiredProductivity;
-        else {
+
+        if (nodeSurplus != 0) {
             factoryInfo.nodes = Math.ceil(factoryInfo.nodes);
-            factoryInfo.totalProductivity = productivity;
             factoryInfo.surplus = productivity - (productivity * nodeSurplus);
         }
+        factoryInfo.totalProductivity = productivity * factoryInfo.nodes;
 
         factoryInfoList.add(factoryInfo);
         demandedResources.remove(demandedResource);
