@@ -8,9 +8,9 @@ import java.util.*;
 @Slf4j
 public class ResourceCalculator {
 
-    private final List<DemandedResource> demandedResources = new ArrayList<>();
-    private final List<DemandedResource> demandedResourcesWithoutProcess = new ArrayList<>();
-    private final List<ResourceFactoryInfo> factoryInfoList = new ArrayList<>();
+    private final List<ResourceInfo> demandedResources = new ArrayList<>();
+    private final List<ResourceInfo> demandedResourcesWithoutProcess = new ArrayList<>();
+    private final List<FactoryInfo> factoryInfoList = new ArrayList<>();
 
     public void calculate(Resource resource, int factoryNodeCount) {
         var productivity = calculateOutputProductivity(resource.getProductionProcesses().get(0), resource) * factoryNodeCount;
@@ -23,7 +23,7 @@ public class ResourceCalculator {
         printResult();
     }
 
-    private void processDemandedResource(DemandedResource demandedResource) {
+    private void processDemandedResource(ResourceInfo demandedResource) {
         var process = getDefaultProductionProcess(demandedResource.resource);
         if (process == null) {
             addDemandedResourceWithoutProcess(demandedResource);
@@ -31,11 +31,11 @@ public class ResourceCalculator {
             return;
         }
 
-        var factoryInfo = new ResourceCalculator.ResourceFactoryInfo();
+        var factoryInfo = new FactoryInfo();
         factoryInfo.productionProcess = process;
 
         var productivity = calculateOutputProductivity(process, demandedResource.resource);
-        factoryInfo.nodes = demandedResource.requiredProductivity / productivity;
+        factoryInfo.nodes = demandedResource.productivity / productivity;
 
         var nodeSurplus = factoryInfo.nodes % 1d;
 
@@ -67,10 +67,10 @@ public class ResourceCalculator {
     }
 
     private void addDemandedResource(Resource resource, double productivity) {
-        demandedResources.add(new DemandedResource(resource, productivity));
+        demandedResources.add(new ResourceInfo(resource, productivity));
     }
 
-    private void addDemandedResourceWithoutProcess(DemandedResource demandedResource) {
+    private void addDemandedResourceWithoutProcess(ResourceInfo demandedResource) {
         demandedResourcesWithoutProcess.add(demandedResource);
     }
 
@@ -132,7 +132,7 @@ public class ResourceCalculator {
     }
 
     @EqualsAndHashCode
-    private static class ResourceFactoryInfo {
+    private static class FactoryInfo {
         ProductionProcess productionProcess;
         double nodes;
         double totalProductivity;
@@ -144,17 +144,18 @@ public class ResourceCalculator {
     }
 
     @EqualsAndHashCode
-    private static class DemandedResource {
+    private static class ResourceInfo {
         Resource resource;
-        double requiredProductivity;
+        double productivity;
+        double surplus;
 
-        DemandedResource(Resource resource, double requiredProductivity) {
+        ResourceInfo(Resource resource, double productivity) {
             this.resource = resource;
-            this.requiredProductivity = requiredProductivity;
+            this.productivity = productivity;
         }
 
         void print() {
-            System.out.printf("| %-20s| %-13.1f|%n", resource.getName(), requiredProductivity);
+            System.out.printf("| %-20s| %-13.1f|%n", resource.getName(), productivity);
         }
     }
 }
