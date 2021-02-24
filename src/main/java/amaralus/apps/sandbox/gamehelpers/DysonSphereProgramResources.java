@@ -8,6 +8,7 @@ public final class DysonSphereProgramResources {
     public static final Resource TITANIUM_ORE = new Resource("Titanium ore");
     public static final Resource SILICON_ORE = new Resource("Silicon ore");
     public static final Resource STONE = new Resource("Stone");
+    public static final Resource COAL = new Resource("Coal");
     public static final Resource WATER = new Resource("Water");
     public static final Resource HYDROGEN = new Resource("Hydrogen");
     public static final Resource FIRE_ICE = new Resource("Fire ice");
@@ -17,10 +18,15 @@ public final class DysonSphereProgramResources {
     public static final Resource TITANIUM_INGOT = new Resource("Titanium ingot");
     public static final Resource HIGH_PURITY_SILICON = new Resource("High-purity silicon");
     public static final Resource GLASS = new Resource("Glass");
+    public static final Resource ENERGETIC_GRAPHITE = new Resource("Energetic graphite");
     public static final Resource MAGNET = new Resource("Magnet");
 
+    public static final Resource GEAR = new Resource("Gear");
     public static final Resource STEEL = new Resource("Steel");
     public static final Resource MAGNETIC_COIL = new Resource("Magnetic coil");
+    public static final Resource ELECTRIC_MOTOR = new Resource("Electric motor");
+    public static final Resource ELECTROMAGNETIC_TURBINE = new Resource("Electromagnetic turbine");
+    public static final Resource SUPER_MAGNETIC_RING = new Resource("Super-magnetic ring");
     public static final Resource MICROCRYSTALLINE_COMPONENT = new Resource("Microrystalline component");
     public static final Resource CIRCUIT_BOARD = new Resource("Circuit board");
     public static final Resource PROCESSOR = new Resource("Processor");
@@ -57,10 +63,20 @@ public final class DysonSphereProgramResources {
                     .output(STONE, 2)
                     .output(GLASS, 1);
 
+    public static final ProductionProcess ENERGETIC_GRAPHITE_PRODUCTION =
+            new ProductionProcess("Energetic graphite production", 2)
+                    .output(COAL, 2)
+                    .output(ENERGETIC_GRAPHITE, 1);
+
     public static final ProductionProcess MAGNET_PRODUCTION =
             new ProductionProcess("Magnet production", 1.5)
                     .input(IRON_ORE, 1)
                     .output(MAGNET, 1);
+
+    public static final ProductionProcess GEAR_PRODUCTION =
+            new ProductionProcess("Gear production", 1)
+                    .input(IRON_INGOT, 1)
+                    .output(GEAR, 1);
 
     public static final ProductionProcess STEEL_PRODUCTION =
             new ProductionProcess("Steel productuin", 3)
@@ -72,6 +88,26 @@ public final class DysonSphereProgramResources {
                     .input(MAGNET, 2)
                     .input(COPPER_INGOT, 1)
                     .output(MAGNETIC_COIL, 2);
+
+    public static final ProductionProcess ELECTRIC_MOTOR_PRODUCTION =
+            new ProductionProcess("Electric motor production", 2)
+                    .input(IRON_INGOT, 2)
+                    .input(GEAR, 1)
+                    .input(MAGNETIC_COIL, 1)
+                    .output(ELECTRIC_MOTOR, 1);
+
+    public static final ProductionProcess ELECTROMAGNETIC_TURBINE_PRODUCTION =
+            new ProductionProcess("Electromagnetic turbine production", 2)
+                    .input(ELECTRIC_MOTOR, 2)
+                    .input(MAGNETIC_COIL, 2)
+                    .output(ELECTROMAGNETIC_TURBINE, 1);
+
+    public static final ProductionProcess SUPER_MAGNETIC_RING_PRODUCTION =
+            new ProductionProcess("Super-magnetic ring production", 3)
+                    .input(ELECTROMAGNETIC_TURBINE, 2)
+                    .input(MAGNET, 3)
+                    .input(ENERGETIC_GRAPHITE, 1)
+                    .output(SUPER_MAGNETIC_RING, 1);
 
     public static final ProductionProcess CIRCUIT_BOARD_PRODUCTION =
             new ProductionProcess("Circuit board production", 1)
