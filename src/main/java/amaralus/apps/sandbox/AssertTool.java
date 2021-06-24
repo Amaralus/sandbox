@@ -29,10 +29,10 @@ public class AssertTool {
 
         try {
             failedAssertBuilder = new StringBuilder();
-            boolean result = true;
-            Map<String, Object> actualFieldsValues = extractFieldsValues(actual);
+            var result = true;
+            var actualFieldsValues = extractFieldsValues(actual);
 
-            for (Map.Entry<String, Object> entry : extractFieldsValues(expected).entrySet()) {
+            for (var entry : extractFieldsValues(expected).entrySet()) {
                 if (!actualFieldsValues.containsKey(entry.getKey())) {
                     if (!skipMissingFields) {
                         result = false;
@@ -61,7 +61,7 @@ public class AssertTool {
     private Map<String, Object> extractFieldsValues(Object object) throws IllegalAccessException {
         Map<String, Object> fieldsValues = new HashMap<>();
 
-        for (Field field : object.getClass().getDeclaredFields()) {
+        for (var field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             fieldsValues.put(field.getName(), field.get(object));
         }
