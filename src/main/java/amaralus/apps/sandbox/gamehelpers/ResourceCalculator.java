@@ -3,7 +3,8 @@ package amaralus.apps.sandbox.gamehelpers;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class ResourceCalculator {
@@ -108,6 +109,7 @@ public class ResourceCalculator {
     private void printResult() {
         printFactoryInfo();
         printDemandWithoutProcess();
+        printConveyorHint();
     }
 
     private void printFactoryInfo() {
@@ -135,6 +137,13 @@ public class ResourceCalculator {
             demand.print();
         }
         printLine(25, 14);
+    }
+
+    private void printConveyorHint() {
+        System.out.println("\nConveyor hint:");
+        System.out.println("MK.I   0-360");
+        System.out.println("MK.II  360-720");
+        System.out.println("MK.III 720-1800");
     }
 
     private void printLine(int... repeats) {
